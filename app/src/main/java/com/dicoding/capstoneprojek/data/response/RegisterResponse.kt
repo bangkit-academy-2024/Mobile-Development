@@ -14,6 +14,7 @@ data class RegisterResponse(
     val user: RegisteredUser
 )
 
+
 data class RegisteredUser(
 
     @field:SerializedName("username")
