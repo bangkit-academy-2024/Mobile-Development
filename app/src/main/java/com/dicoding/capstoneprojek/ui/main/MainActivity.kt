@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.dicoding.capstoneprojek.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -22,9 +25,16 @@ import com.dicoding.capstoneprojek.ui.ViewModel.FactoryViewModel
 import com.dicoding.capstoneprojek.ui.login.LoginActivity
 import com.dicoding.capstoneprojek.ui.result.ResultActivity
 import com.yalantis.ucrop.UCrop
+import org.tensorflow.lite.task.vision.classifier.Classifications
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        currentImageUri?.let {
+            outState.putString("current_image_uri", it.toString())
+        }
+    }
     private val viewModel by viewModels<ViewModelMain> {
         FactoryViewModel.getInstance(this)
     }
@@ -35,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private var exitDialog: AlertDialog? = null
     private var logoutDialog: AlertDialog? = null
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         setupObservers()
         setupAction()
 
+
         onBackPressedDispatcher.addCallback(this) {
             showExitConfirmationDialog()
         }
@@ -60,9 +72,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.imageUri.observe(this) { uri ->
-            uri?.let {
-                binding.previewImageView.setImageURI(it)
+            if (uri != null) {
+                binding.previewImageView.setImageURI(uri)
+                binding.previewImageView.background = null // Pastikan background dihapus
                 binding.analyzeButton.visibility = View.VISIBLE
+            } else {
+                binding.previewImageView.setImageDrawable(null)
+                binding.previewImageView.background = getDrawable(R.drawable.ic_image_holder_24) // Atur latar belakang default jika diperlukan
+                binding.analyzeButton.visibility = View.GONE
             }
         }
 
@@ -80,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                 cameraLaunch.launch(currentImageUri!!)
             }
         }
+
     }
 
     private fun openGallery() {
@@ -132,53 +150,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-//    private fun analyzeImage(imageUri: Uri) {
-//        Log.d("Analyze Image", "URI: $imageUri")
-//        val imageClassifierHelper = ImageClassifierHelper(
-//            context = this,
-//            classifierListener = object : ImageClassifierHelper.ClassifierListener {
-//                override fun onError(error: String) {
-//                    Log.e("Classifier Error", error)
-//                    showToast(error)
-//                }
-//
-//                override fun onResults(results: List<ImageClassifierHelper.Result>) {
-//                    Log.d("Classifier Results", results.toString())
-//                    val resultString = results?.joinToString("\n") {
-//                        val label = it.categories[0].label
-//                        val score = (it.categories[0].score * 100).toInt()
-//                        "$label: $score%"
-//                    } ?: getString(R.string.classification_failed)
-//
-//                    moveToResult(imageUri, resultString)
-//                }
-//            }
-//        )
-//        imageClassifierHelper.classifyStaticImage(imageUri)
-//    }
-
+    // Menganalisis gambar menggunakan model TensorFlow Lite
     private fun analyzeImage(imageUri: Uri) {
-        Log.d("Analyze Image", "URI: $imageUri")
+        // Membuat helper untuk melakukan klasifikasi gambar
         val imageClassifierHelper = ImageClassifierHelper(
             context = this,
             classifierListener = object : ImageClassifierHelper.ClassifierListener {
                 override fun onError(error: String) {
-                    Log.e("Classifier Error", error)
-                    showToast(error)
+                    showToast(error) // Menampilkan pesan jika terjadi kesalahan
                 }
 
-                override fun onResults(results: List<ImageClassifierHelper.Result>) {
-                    Log.d("Classifier Results", results.toString())
-                    val resultString = results.joinToString("\n") {
-                        val label = it.label
-                        val score = (it.probability * 100).toInt()
+                override fun onResults(results: List<Classifications>?) {
+                    // Mengonversi hasil klasifikasi menjadi string
+                    val resultString = results?.joinToString("\n") {
+                        val label = it.categories[0].label
+                        val score = (it.categories[0].score * 100).toInt()
                         "$label: $score%"
-                    }
+                    } ?: getString(R.string.classification_failed)
 
-                    moveToResult(imageUri, resultString)
+                    moveToResult(imageUri, resultString) // Pindah ke ResultActivity dengan hasil klasifikasi
                 }
             }
         )
+
+        // Memulai proses klasifikasi gambar
         imageClassifierHelper.classifyStaticImage(imageUri)
     }
 
@@ -275,6 +270,14 @@ class MainActivity : AppCompatActivity() {
         }
         exitDialog = builder.show()
     }
+
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val restoredUri = savedInstanceState.getParcelable<Uri>("currentImageUri")
+        restoredUri?.let { viewModel.setImageUri(it) }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
