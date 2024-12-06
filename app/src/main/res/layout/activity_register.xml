@@ -12,7 +12,6 @@
         android:id="@+id/r3b8rt1jx6p7"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
         android:clipToPadding="false"
         android:paddingTop="50dp">
 
@@ -38,7 +37,6 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginBottom="50dp"
                 android:text="@string/regist"
-                android:textColor="#000000"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -62,7 +60,8 @@
                     android:hint="@string/input_name"
                     android:inputType="textEmailAddress"
                     android:scrollHorizontally="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColorHint="@color/hintColor"/>
 
             </LinearLayout>
             <LinearLayout
@@ -86,7 +85,8 @@
                     android:hint="@string/input_username"
                     android:inputType="textEmailAddress"
                     android:scrollHorizontally="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColorHint="@color/hintColor"/>
 
             </LinearLayout>
 
@@ -112,7 +112,8 @@
                     android:ellipsize="end"
                     android:inputType="textEmailAddress"
                     android:scrollHorizontally="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColorHint="@color/hintColor"/>
 
             </LinearLayout>
 
@@ -136,7 +137,8 @@
                     android:background="@null"
                     android:ellipsize="end"
                     android:scrollHorizontally="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColorHint="@color/hintColor"/>
             </LinearLayout>
 
             <TextView

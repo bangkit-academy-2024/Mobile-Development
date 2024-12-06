@@ -50,4 +50,8 @@
     <color name="tertiaryFixed">#FFD8E4</color>
     <color name="tertiaryFixedDim">#EFB8C8</color>
     <color name="blue">#6A4DFF</color>
+    <color name="colorPrimary">#BB86FC</color> <!-- Primary color for Dark mode -->
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorOnPrimary">#000000</color> <!-- Text or icon color on primary background -->
+    <color name="hintColor">#787878</color> <!-- Warna abu-abu yang lebih gelap untuk Dark mode -->
 </resources>
