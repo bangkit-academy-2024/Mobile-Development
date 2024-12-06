@@ -88,8 +88,18 @@ class ImageClassifierHelper(
                     ClassificationResult(label = label, score = score)
                 }
 
-                // Pass results back to listener
-                classifierListener.onResults(results)
+                // Urutkan hasil klasifikasi berdasarkan skor tertinggi
+                val sortedResults = results.sortedByDescending { it.score }
+
+                // Ambil hasil dengan skor tertinggi
+                val highestResult = sortedResults.firstOrNull()
+
+                // Pass results back to listener, hanya yang dengan skor tertinggi
+                highestResult?.let {
+                    classifierListener.onResults(listOf(it))
+                } ?: run {
+                    classifierListener.onError("No valid result")
+                }
             }
         } catch (e: Exception) {
             classifierListener.onError("Error during classification: ${e.message}")

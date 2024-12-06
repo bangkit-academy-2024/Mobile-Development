@@ -42,5 +42,6 @@
     <string name="image_classifier_failed">Gagal melakukan klasifikasi gambar</string>
     <string name="have_account">Sudah punya akun? Masuk Sekarang</string>
     <string name="image_processing_failed">Proses gagal</string>
+    <string name="open_chatbot">Chat Bot</string>
 
 </resources>
