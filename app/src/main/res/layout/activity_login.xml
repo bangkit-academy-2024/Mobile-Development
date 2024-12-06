@@ -59,7 +59,8 @@
                     android:inputType="textEmailAddress"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textColorHint="@color/hintColor"/>
+                    android:textColorHint="@color/hintColor"
+                    android:textColor="@color/editTextTextColor"/>
 
             </LinearLayout>
 
@@ -84,7 +85,8 @@
                     android:ellipsize="end"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textColorHint="@color/hintColor"/>
+                    android:textColorHint="@color/hintColor"
+                    android:textColor="@color/editTextTextColor"/>
             </LinearLayout>
 
             <TextView
