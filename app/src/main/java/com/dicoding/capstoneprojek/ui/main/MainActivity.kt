@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.capstoneprojek.helper.ImageClassifierHelper
 import com.dicoding.capstoneprojek.R
 import com.dicoding.capstoneprojek.databinding.ActivityMainBinding
+import com.dicoding.capstoneprojek.helper.ClassificationResult
 import com.dicoding.capstoneprojek.ui.ViewModel.FactoryViewModel
 import com.dicoding.capstoneprojek.ui.login.LoginActivity
 import com.dicoding.capstoneprojek.ui.result.ResultActivity
@@ -152,7 +153,6 @@ class MainActivity : AppCompatActivity() {
 
     // Menganalisis gambar menggunakan model TensorFlow Lite
     private fun analyzeImage(imageUri: Uri) {
-        // Membuat helper untuk melakukan klasifikasi gambar
         val imageClassifierHelper = ImageClassifierHelper(
             context = this,
             classifierListener = object : ImageClassifierHelper.ClassifierListener {
@@ -160,20 +160,19 @@ class MainActivity : AppCompatActivity() {
                     showToast(error) // Menampilkan pesan jika terjadi kesalahan
                 }
 
-                override fun onResults(results: List<Classifications>?) {
-                    // Mengonversi hasil klasifikasi menjadi string
-                    val resultString = results?.joinToString("\n") {
-                        val label = it.categories[0].label
-                        val score = (it.categories[0].score * 100).toInt()
+                override fun onResults(results: List<ClassificationResult>) { // Ubah tipe parameter
+                    val resultString = results.joinToString("\n") { result ->
+                        val label = result.label
+                        val score = (result.score * 100).toInt()
                         "$label: $score%"
-                    } ?: getString(R.string.classification_failed)
+                    }
 
                     moveToResult(imageUri, resultString) // Pindah ke ResultActivity dengan hasil klasifikasi
                 }
             }
         )
 
-        // Memulai proses klasifikasi gambar
+
         imageClassifierHelper.classifyStaticImage(imageUri)
     }
 
