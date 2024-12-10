@@ -160,18 +160,15 @@ class MainActivity : AppCompatActivity() {
                     showToast(error) // Menampilkan pesan jika terjadi kesalahan
                 }
 
-                override fun onResults(results: List<ClassificationResult>) { // Ubah tipe parameter
-                    val resultString = results.joinToString("\n") { result ->
-                        val label = result.label
-                        val score = (result.score * 100).toInt()
-                        "$label: $score%"
-                    }
+                override fun onResults(result: Map<String, Any>) {  // Terima hasil sebagai Map
+                    val predictedClass = result["predicted_class"] as? String ?: "Unknown"
+                    val confidence = result["confidence"] as? Float ?: 0f
 
+                    val resultString = "$predictedClass: ${(confidence * 100).toInt()}%"
                     moveToResult(imageUri, resultString) // Pindah ke ResultActivity dengan hasil klasifikasi
                 }
             }
         )
-
 
         imageClassifierHelper.classifyStaticImage(imageUri)
     }
@@ -283,4 +280,5 @@ class MainActivity : AppCompatActivity() {
         exitDialog?.dismiss()
         logoutDialog?.dismiss()
     }
+
 }

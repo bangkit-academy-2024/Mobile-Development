@@ -1,21 +1,17 @@
 package com.dicoding.capstoneprojek.ui.result
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.dicoding.capstoneprojek.R
 import com.dicoding.capstoneprojek.databinding.ActivityResultBinding
+import com.dicoding.capstoneprojek.ui.chat.ChatActivity
 
 class ResultActivity : AppCompatActivity() {
 
     // Menggunakan View Binding untuk mengakses komponen layout
     private lateinit var binding: ActivityResultBinding
-
-    // ViewModel untuk mengelola data history
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +19,6 @@ class ResultActivity : AppCompatActivity() {
         // Menginisialisasi binding dan menghubungkan layout dengan activity
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         // Mendapatkan URI gambar dan hasil analisis dari Intent
         val imageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI))
@@ -42,13 +36,21 @@ class ResultActivity : AppCompatActivity() {
             binding.resultText.text = it // Menampilkan hasil analisis
         }
 
+        // Ambil label penyakit berdasarkan hasil klasifikasi atau analisis
+        val diseaseLabel = result ?: "unknown"  // Gunakan hasil analisis sebagai label penyakit
+
+        // Menangani klik tombol ChatBot
+        binding.btnOpenChatbot.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("disease_label", diseaseLabel)  // Kirimkan diseaseLabel ke ChatActivity
+            Log.d("ResultActivity", "Sending diseaseLabel: $diseaseLabel")  // Log untuk memastikan label terkirim
+            startActivity(intent)  // Memulai ChatActivity
+        }
 
     }
 
-
-
     companion object {
-        const val EXTRA_IMAGE_URI = "extra_image_uri" // Kunci untuk URI gambar dalam Intent
-        const val EXTRA_RESULT = "extra_result" // Kunci untuk hasil analisis dalam Intent
+        const val EXTRA_IMAGE_URI = "extra_image_uri"  // Kunci untuk URI gambar dalam Intent
+        const val EXTRA_RESULT = "extra_result"        // Kunci untuk hasil analisis dalam Intent
     }
 }

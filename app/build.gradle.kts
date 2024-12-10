@@ -112,5 +112,7 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.13.0")
     implementation(libs.play.services.basement)
 
+    implementation ("com.google.code.gson:gson:2.8.9")
+
 
 }

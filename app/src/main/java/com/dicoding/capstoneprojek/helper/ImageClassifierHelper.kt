@@ -25,6 +25,13 @@ class ImageClassifierHelper(
         "Squamous cell carcinoma", "Vascular lesions"
     )
 
+    // Tambahkan daftar kode label dalam format huruf kecil dengan underscore
+    private val labelCodes = listOf(
+        "actinic_keratosis", "basal_cell_carcinoma", "benign_keratosis",
+        "dermatofibroma", "melanocytic_nevus", "melanoma",
+        "squamous_cell_carcinoma", "vascular_lesions"
+    )
+
     init {
         try {
             // Inisialisasi model saat helper dibuat
@@ -85,7 +92,10 @@ class ImageClassifierHelper(
                 val results = outputFeature.floatArray.mapIndexed { index, score ->
                     // Gantilah label numerik dengan nama kelas yang sesuai
                     val label = classLabels.getOrNull(index) ?: "Unknown"
-                    ClassificationResult(label = label, score = score)
+                    val labelCode = labelCodes.getOrNull(index) ?: "unknown"
+
+                    // Kembalikan objek yang tetap memuat labelCode, tetapi tidak dikirimkan ke listener
+                    ClassificationResult(label = label, score = score, labelCode = labelCode)
                 }
 
                 // Urutkan hasil klasifikasi berdasarkan skor tertinggi
@@ -94,9 +104,14 @@ class ImageClassifierHelper(
                 // Ambil hasil dengan skor tertinggi
                 val highestResult = sortedResults.firstOrNull()
 
-                // Pass results back to listener, hanya yang dengan skor tertinggi
+                // Pass results back to listener
                 highestResult?.let {
-                    classifierListener.onResults(listOf(it))
+                    // Kirimkan hanya label dan score, tanpa labelCode
+                    val result = mapOf(
+                        "predicted_class" to it.label,  // Hanya tampilkan label
+                        "confidence" to it.score  // Hanya tampilkan skor
+                    )
+                    classifierListener.onResults(result)  // Mengirim hasil ke listener
                 } ?: run {
                     classifierListener.onError("No valid result")
                 }
@@ -111,7 +126,7 @@ class ImageClassifierHelper(
     }
 
     interface ClassifierListener {
-        fun onResults(results: List<ClassificationResult>)
+        fun onResults(result: Map<String, Any>)  // Parameter berubah menjadi Map
         fun onError(error: String)
     }
 }

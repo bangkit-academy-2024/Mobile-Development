@@ -43,5 +43,7 @@
     <string name="have_account">Sudah punya akun? Masuk Sekarang</string>
     <string name="image_processing_failed">Proses gagal</string>
     <string name="open_chatbot">Chat Bot</string>
+    <string name="your_question">Ketik pertanyaan Anda...</string>
+    <string name="send">Kirim</string>
 
 </resources>
