@@ -1,4 +1,5 @@
 package com.dicoding.capstoneprojek.helper
+
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
@@ -22,10 +23,12 @@ data class Answer(
     val kategori: String,
     val text: String
 )
+
 data class ChatMessage(
     val message: String,
     val isUser: Boolean
 )
+
 // Fungsi untuk memuat data JSON
 fun loadDiseaseData(context: Context): DiseaseData {
     val assetManager = context.assets
@@ -34,12 +37,16 @@ fun loadDiseaseData(context: Context): DiseaseData {
     val type = object : TypeToken<DiseaseData>() {}.type
     return Gson().fromJson(reader, type)
 }
-fun getDiseaseDetails(label: String, diseaseData: DiseaseData): DiseaseDetail? {
-    // Memastikan penyakit berisi label yang dicari di dalam map penyakit
-    Log.d("getDiseaseDetails", "Searching for label: $label")
 
+fun getDiseaseDetails(labelCodes: String, diseaseData: DiseaseData): DiseaseDetail? {
+    // Memastikan penyakit berisi label yang dicari di dalam map penyakit
+    Log.d("getDiseaseDetails", "Searching for label: $labelCodes")
+    val formattedLabelCodes = labelCodes.lowercase().replace(" ", "_")
+    val result = formattedLabelCodes.substringBefore(":")
+    println(result) // Output: melanoma
+    println(diseaseData)
     // Cari DiseaseDetail berdasarkan label
-    val diseaseDetail = diseaseData.penyakit[label]
+    val diseaseDetail = diseaseData.penyakit[result]
 
     Log.d("getDiseaseDetails", "Found diseaseDetail: $diseaseDetail")
     return diseaseDetail

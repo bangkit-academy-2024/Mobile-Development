@@ -89,7 +89,7 @@ class ChatActivity : AppCompatActivity() {
         if (response != null) {
             addMessageToChat(response.text, isUser = false)
         } else {
-            addMessageToChat("Maaf, saya tidak mengerti pertanyaan Anda. Coba gunakan kata kunci seperti 'Gejala', 'Penyebab', atau 'Pengobatan'.", isUser = false)
+            addMessageToChat("Maaf, saya tidak mengerti pertanyaan Anda. Coba gunakan kata kunci seperti 'Gejala', 'Penyebab', atau 'Cara pengobatan'.", isUser = false)
         }
     }
 
