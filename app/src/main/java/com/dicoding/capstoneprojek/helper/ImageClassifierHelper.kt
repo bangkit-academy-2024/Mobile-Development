@@ -20,9 +20,9 @@ class ImageClassifierHelper(
 
     // Daftar nama kelas penyakit sesuai dengan output model
     private val classLabels = listOf(
-        "Actinic keratosis", "Basal cell carcinoma", "Benign keratosis",
-        "Dermatofibroma", "Melanocytic nevus", "Melanoma",
-        "Squamous cell carcinoma", "Vascular lesions"
+        "Squamous Cell Carcinoma", "Pigmented Benign Keratosis", "Basal Cell Carcinoma",
+        "Melanoma", "Seborrheic Keratosis", "Nevus",
+        "Actinic Keratosis"
     )
 
     // Tambahkan daftar kode label dalam format huruf kecil dengan underscore
