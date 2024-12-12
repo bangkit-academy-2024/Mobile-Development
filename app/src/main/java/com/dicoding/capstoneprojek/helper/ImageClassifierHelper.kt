@@ -27,9 +27,9 @@ class ImageClassifierHelper(
 
     // Tambahkan daftar kode label dalam format huruf kecil dengan underscore
     private val labelCodes = listOf(
-        "actinic_keratosis", "basal_cell_carcinoma", "benign_keratosis",
-        "dermatofibroma", "melanocytic_nevus", "melanoma",
-        "squamous_cell_carcinoma", "vascular_lesions"
+        "squamous_cell_carcinoma", "pigmented_benign_keratosis", "basal_cell_carcinoma",
+        "melanoma", "seborrheic_keratosis", "nevus",
+        "actinic_keratosis"
     )
 
     init {
